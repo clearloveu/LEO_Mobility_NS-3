@@ -8,12 +8,14 @@ This module is based on ns-3.29.
 
 ## document introduction
 
-There are three directories:
+There are four directories:
 One is scratch/, which contains test cases of various LEO satellite constellations, including iridium, oneweb, startlink, etc., as well as those using the new segmented routing algorithm.For iridium constellation, three test cases of different routing algorithms are written. It includes the best route of ipv4globalroutinghelper (see iridium-topology2-updV3.cc), improved Nix segmented route (see iridium-nix-segment-routing.cc and iridium-SWS.cc) and OLSR (see iridium-OLSR.cc).
 
-Second file is src/mobility/, which only adds a few files to the source directory.
+Second directory is src/mobility/, which only adds a few files to the source directory.
 
-The third file is helper/, which contains some scripts. Among them, analysisNs3TranceFile.py is used to analyze the trace file obtained from the running of test cases in scratch; generate_satellite_init_position.py is used to generate initial constellation data; the other three files are used to visualize the orbit of iridium, oneweb, startlink and other constellations.
+The third directory is helper/, which contains some scripts. Among them, analysisNs3TranceFile.py is used to analyze the trace file obtained from the running of test cases in scratch; generate_satellite_init_position.py is used to generate initial constellation data; the other three files are used to visualize the orbit of iridium, oneweb, startlink and other constellations.
+
+The fourth folder is nix-vector-routing/, it makes some modifications to nix vector routing to adapt to SWS algorithm, which can be ignored.
 
 
 ## use
