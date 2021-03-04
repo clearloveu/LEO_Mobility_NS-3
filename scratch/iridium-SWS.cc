@@ -315,65 +315,66 @@ int main (int argc, char *argv[])
   Ipv4InterfaceContainer i33i34 = ipv4InterfaceContainer[33];//卫星编号33和34之间的链路的ip分配
 
   // 实验1：s=22，d=1，t=186.22
-  Ptr<Node> source = nodes.Get(22);
-  Ptr<Node> dest = nodes.Get(1);
-  Ipv4Address destinationIp = i1i2.GetAddress (0);
-  double serverStartTime = 170.0;
-  double serverEndTime = 215.0;
-  double clientStartTime = 180.0;
-  double clientEndTime = 215.0;
-  double interval = 0.1;
+//  Ptr<Node> source = nodes.Get(22);
+//  Ptr<Node> dest = nodes.Get(1);
+//  Ipv4Address destinationIp = i1i2.GetAddress (0);
+//  double serverStartTime = 170.0;
+//  double serverEndTime = 215.0;
+//  double clientStartTime = 180.0;
+//  double clientEndTime = 215.0;
+//  double interval = 0.1;
+//
+//  UdpEchoServerHelper echoServer (9);
+//  ApplicationContainer serverApps = echoServer.Install (dest);
+//  serverApps.Start (Seconds (serverStartTime));
+//  serverApps.Stop (Seconds (serverEndTime));
+//
+//  UdpEchoClientHelper echoClient (destinationIp, 9);
+//  echoClient.SetAttribute ("MaxPackets", UintegerValue (200));
+//  echoClient.SetAttribute ("Interval", TimeValue (Seconds (interval)));
+//  echoClient.SetAttribute ("PacketSize", UintegerValue (1024));
+//
+//  ApplicationContainer clientApps = echoClient.Install (source);
+//  clientApps.Start (Seconds (clientStartTime));
+//  clientApps.Stop (Seconds (clientEndTime));
+//
+//  Simulator::Schedule (Seconds (clientStartTime-0.05), Progress,destinationIp,source,dest,interval,clientEndTime);
 
-  UdpEchoServerHelper echoServer (9);
-  ApplicationContainer serverApps = echoServer.Install (dest);
-  serverApps.Start (Seconds (serverStartTime));
-  serverApps.Stop (Seconds (serverEndTime));
-
-  UdpEchoClientHelper echoClient (destinationIp, 9);
-  echoClient.SetAttribute ("MaxPackets", UintegerValue (100));
-  echoClient.SetAttribute ("Interval", TimeValue (Seconds (interval)));
-  echoClient.SetAttribute ("PacketSize", UintegerValue (1024));
-
-  ApplicationContainer clientApps = echoClient.Install (source);
-  clientApps.Start (Seconds (clientStartTime));
-  clientApps.Stop (Seconds (clientEndTime));
-
-  Simulator::Schedule (Seconds (clientStartTime-0.1), Progress,destinationIp,source,dest,interval,clientEndTime);
 	// 航点发生故障
-  Simulator::Schedule (Seconds (184.72), setFaultSatellite, nodes.Get(0), true);
-  Simulator::Schedule (Seconds (186.00), setFaultSatellite, nodes.Get(0), false);
+//  Simulator::Schedule (Seconds (184.72), setFaultSatellite, nodes.Get(0), true);
+//  Simulator::Schedule (Seconds (186.00), setFaultSatellite, nodes.Get(0), false);
   //上面设置的注意点：这里设置时间时，注意如果故障卫星恢复的时间在将断链路断开的时间之后，则会转变成非航点卫星故障，而非航点卫星故障并不一定能找到新的航点，即不一定有新路径，如果找不到，程序会报错（后期解决）
 
 
 
   // 实验2：s=24，d=1，t=186.22
-  Ptr<Node> source2 = nodes.Get(24);
-  Ptr<Node> dest2 = nodes.Get(1);
-  Ipv4Address destinationIp2 = i1i2.GetAddress (0);
-  double serverStartTime2 = 170.0;
-  double serverEndTime2 = 215.0;
-  double clientStartTime2 = 181.0;
-  double clientEndTime2 = 215.0;
-  double interval2 = 0.1;
+//  Ptr<Node> source2 = nodes.Get(24);
+//  Ptr<Node> dest2 = nodes.Get(1);
+//  Ipv4Address destinationIp2 = i1i2.GetAddress (0);
+//  double serverStartTime2 = 170.0;
+//  double serverEndTime2 = 215.0;
+//  double clientStartTime2 = 181.0;
+//  double clientEndTime2 = 215.0;
+//  double interval2 = 0.1;
+//
+//  UdpEchoServerHelper echoServer2 (9);
+//  ApplicationContainer serverApps2 = echoServer2.Install (dest2);
+//  serverApps2.Start (Seconds (serverStartTime2));
+//  serverApps2.Stop (Seconds (serverEndTime2));
+//
+//  UdpEchoClientHelper echoClient2 (destinationIp2, 9);
+//  echoClient2.SetAttribute ("MaxPackets", UintegerValue (200));
+//  echoClient2.SetAttribute ("Interval", TimeValue (Seconds (interval2)));
+//  echoClient2.SetAttribute ("PacketSize", UintegerValue (1024));
+//
+//  ApplicationContainer clientApps2 = echoClient2.Install (source2);
+//  clientApps2.Start (Seconds (clientStartTime2));
+//  clientApps2.Stop (Seconds (clientEndTime2));
+//
+//  Simulator::Schedule (Seconds (clientStartTime2-0.05), Progress,destinationIp2,source2,dest2,interval2,clientEndTime2);
 
-  UdpEchoServerHelper echoServer2 (9);
-  ApplicationContainer serverApps2 = echoServer2.Install (dest2);
-  serverApps2.Start (Seconds (serverStartTime2));
-  serverApps2.Stop (Seconds (serverEndTime2));
-
-  UdpEchoClientHelper echoClient2 (destinationIp2, 9);
-  echoClient2.SetAttribute ("MaxPackets", UintegerValue (100));
-  echoClient2.SetAttribute ("Interval", TimeValue (Seconds (interval2)));
-  echoClient2.SetAttribute ("PacketSize", UintegerValue (1024));
-
-  ApplicationContainer clientApps2 = echoClient2.Install (source2);
-  clientApps2.Start (Seconds (clientStartTime2));
-  clientApps2.Stop (Seconds (clientEndTime2));
-
-  Simulator::Schedule (Seconds (clientStartTime2-0.1), Progress,destinationIp2,source2,dest2,interval2,clientEndTime2);
-
-  // 实验3：s=6，d=33，t=734.17
-  Ptr<Node> source3 = nodes.Get(5);
+  // 实验3：s=4，d=33，t=734.17
+  Ptr<Node> source3 = nodes.Get(5);//！！！！
   Ptr<Node> dest3 = nodes.Get(33);
   Ipv4Address destinationIp3 = i33i34.GetAddress (0);
   double serverStartTime3 = 720.0;
@@ -388,7 +389,7 @@ int main (int argc, char *argv[])
   serverApps3.Stop (Seconds (serverEndTime3));
 
   UdpEchoClientHelper echoClient3 (destinationIp3, 9);
-  echoClient3.SetAttribute ("MaxPackets", UintegerValue (100)); //
+  echoClient3.SetAttribute ("MaxPackets", UintegerValue (200)); //
   echoClient3.SetAttribute ("Interval", TimeValue (Seconds (interval3)));
   echoClient3.SetAttribute ("PacketSize", UintegerValue (1024));
 
@@ -396,15 +397,16 @@ int main (int argc, char *argv[])
   clientApps3.Start (Seconds (clientStartTime3));
   clientApps3.Stop (Seconds (clientEndTime3));
 
-  Simulator::Schedule (Seconds (clientStartTime3-0.1), Progress,destinationIp3,source3,dest3,interval3,clientEndTime3);
-//  // 非航点发生故障
-//  Simulator::Schedule (Seconds (728.85), setFaultSatellite, nodes.Get(11), true);
-//  Simulator::Schedule (Seconds (729.85), setFaultSatellite, nodes.Get(11), false);
-//  Simulator::Schedule (Seconds (730.85), setFaultSatellite, nodes.Get(21), true);
-//  Simulator::Schedule (Seconds (732.85), setFaultSatellite, nodes.Get(21), false);
+  Simulator::Schedule (Seconds (clientStartTime3-0.05), Progress,destinationIp3,source3,dest3,interval3,clientEndTime3);
+
+  // 非航点发生故障
+  Simulator::Schedule (Seconds (729.85), setFaultSatellite, nodes.Get(11), true); //728.85
+  Simulator::Schedule (Seconds (732.85), setFaultSatellite, nodes.Get(11), false); //729.85
+  Simulator::Schedule (Seconds (729.85), setFaultSatellite, nodes.Get(21), true); //730.85
+  Simulator::Schedule (Seconds (732.85), setFaultSatellite, nodes.Get(21), false); //732.85
 	// 航点发生故障
-	Simulator::Schedule (Seconds (731.85), setFaultSatellite, nodes.Get(10), true);
-	Simulator::Schedule (Seconds (733.85), setFaultSatellite, nodes.Get(10), false);
+//	Simulator::Schedule (Seconds (731.85), setFaultSatellite, nodes.Get(10), true);
+//	Simulator::Schedule (Seconds (733.85), setFaultSatellite, nodes.Get(10), false);
 
 
   double simulatorLastTime = 800.0;
@@ -412,7 +414,7 @@ int main (int argc, char *argv[])
   Simulator::Stop (Seconds (simulatorLastTime));
 
   AsciiTraceHelper ascii;
-//  p2p.EnableAsciiAll (ascii.CreateFileStream ("iridium-SWS.tr"));
+  p2p.EnableAsciiAll (ascii.CreateFileStream ("iridium-SWS.tr"));
 //  p2p.EnablePcapAll ("iridium-SWS");
 
   Simulator::Run ();

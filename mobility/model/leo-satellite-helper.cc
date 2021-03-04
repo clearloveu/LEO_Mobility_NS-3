@@ -1143,7 +1143,6 @@ LEOSatelliteHelper::setIsFault(bool flag){
 	Ptr<Node> self = m_pos.self;
 	Ptr<LEOSatelliteMobilityModel> mobility = self->GetObject<LEOSatelliteMobilityModel> ();
 	int routingAlgorithmNumber = mobility->getRoutingAlgorithmNumber();
-
 	isFault = flag;
 	// 如果是故障卫星，且路由算法不是nix，则关闭该卫星的所有链路
 	if(routingAlgorithmNumber !=2){
@@ -1294,6 +1293,18 @@ LEOSatelliteHelper::findWayPointByInflectionPoint1(Ptr<Node> pre, Ptr<Node> cur,
 	return temp;
 }
 
+// 形参的3个卫星是否存在故障
+bool isFaultSatellite(Ptr<Node> pre, Ptr<Node> cur, Ptr<Node> next){
+	Ptr<LEOSatelliteMobilityModel> pre_model = pre->GetObject<LEOSatelliteMobilityModel> ();
+	Ptr<LEOSatelliteMobilityModel> cur_model = cur->GetObject<LEOSatelliteMobilityModel> ();
+	Ptr<LEOSatelliteMobilityModel> next_model = next->GetObject<LEOSatelliteMobilityModel> ();
+	if(pre_model->m_helper.isFault) return true;
+	if(cur_model->m_helper.isFault) return true;
+	if(next_model->m_helper.isFault) return true;
+	return false;
+
+}
+
 std::vector< Ptr<Node> >
 LEOSatelliteHelper::findWayPointByInflectionPoint2(Ptr<Node> pre, Ptr<Node> cur, Ptr<Node> next){
 	std::vector< Ptr<Node> > temp;
@@ -1314,6 +1325,8 @@ LEOSatelliteHelper::findWayPointByInflectionPoint2(Ptr<Node> pre, Ptr<Node> cur,
 		std::cout<< "findWayPointByInflectionPoint2 出现bug！"<<std::endl;
 		NS_ASSERT(NULL); // 程序不应该走到这儿,说明pre,cur,next不是通过一条链路连接的
 	}
+
+	// 这里没有补充是否存在故障卫星的逻辑
 	if(pre_cur_next == 1 || pre_cur_next == 2) {
 		// 构造左边的“日“子型的环
 		if(pre_model->m_helper.m_pos.isLeftSatelliteConnection == true
@@ -1338,9 +1351,9 @@ LEOSatelliteHelper::findWayPointByInflectionPoint2(Ptr<Node> pre, Ptr<Node> cur,
 		Ptr<Node> next_up = next_model->m_helper.m_pos.up;
 		Ptr<LEOSatelliteMobilityModel> pre_up_model = pre_up->GetObject<LEOSatelliteMobilityModel> ();
 		Ptr<LEOSatelliteMobilityModel> next_up_model = next_up->GetObject<LEOSatelliteMobilityModel> ();
-		// 保证上方的卫星存在左右链路
-		if((pre_cur_next == 3 && pre_up_model->m_helper.m_pos.isLeftSatelliteConnection == true && next_up_model->m_helper.m_pos.isRightSatelliteConnection == true)
-				|| (pre_cur_next == 4 && pre_up_model->m_helper.m_pos.isRightSatelliteConnection == true && next_up_model->m_helper.m_pos.isLeftSatelliteConnection == true)){
+		// 保证上方的卫星存在左右链路且不存在故障卫星
+		if((pre_cur_next == 3 && !isFaultSatellite(pre_up, next_up, pre_up_model->m_helper.m_pos.left) && pre_up_model->m_helper.m_pos.isLeftSatelliteConnection == true && next_up_model->m_helper.m_pos.isRightSatelliteConnection == true)
+				|| (pre_cur_next == 4 && !isFaultSatellite(pre_up, next_up, pre_up_model->m_helper.m_pos.right) &&  pre_up_model->m_helper.m_pos.isRightSatelliteConnection == true && next_up_model->m_helper.m_pos.isLeftSatelliteConnection == true)){
 			temp.push_back(pre_up);
 			temp.push_back(next_up);
 			return temp;
@@ -1351,13 +1364,20 @@ LEOSatelliteHelper::findWayPointByInflectionPoint2(Ptr<Node> pre, Ptr<Node> cur,
 		Ptr<Node> next_down = next_model->m_helper.m_pos.down;
 		Ptr<LEOSatelliteMobilityModel> pre_down_model = pre_down->GetObject<LEOSatelliteMobilityModel> ();
 		Ptr<LEOSatelliteMobilityModel> next_down_model = next_down->GetObject<LEOSatelliteMobilityModel> ();
-		// 保证下方的卫星存在左右链路
-		if((pre_cur_next == 3 && pre_down_model->m_helper.m_pos.isLeftSatelliteConnection == true && next_down_model->m_helper.m_pos.isRightSatelliteConnection == true)
+		// 保证下方的卫星存在左右链路且不存在故障卫星
+		if((pre_cur_next == 3  && pre_down_model->m_helper.m_pos.isLeftSatelliteConnection == true && next_down_model->m_helper.m_pos.isRightSatelliteConnection == true)
 				|| (pre_cur_next == 4 && pre_down_model->m_helper.m_pos.isRightSatelliteConnection == true && next_down_model->m_helper.m_pos.isLeftSatelliteConnection == true)){
 			temp.push_back(pre_down);
 			temp.push_back(next_down);
 			return temp;
 		}
+//		if((pre_cur_next == 3 && !isFaultSatellite(pre_down, next_down, pre_down_model->m_helper.m_pos.left) && pre_down_model->m_helper.m_pos.isLeftSatelliteConnection == true && next_down_model->m_helper.m_pos.isRightSatelliteConnection == true)
+//				|| (pre_cur_next == 4 && !isFaultSatellite(pre_down, next_down, pre_down_model->m_helper.m_pos.right) && pre_down_model->m_helper.m_pos.isRightSatelliteConnection == true && next_down_model->m_helper.m_pos.isLeftSatelliteConnection == true)){
+//			temp.push_back(pre_down);
+//			temp.push_back(next_down);
+//			return temp;
+//		}
+
 	}
 	std::cout<< "构成不了日型的环"<<std::endl;
 	NS_ASSERT(NULL);
