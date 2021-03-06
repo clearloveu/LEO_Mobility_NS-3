@@ -15,7 +15,7 @@ Second directory is src/mobility/, which only adds a few files to the source dir
 
 The third directory is helper/, which contains some scripts. Among them, analysisNs3TranceFile.py is used to analyze the trace file obtained from the running of test cases in scratch; generate_satellite_init_position.py is used to generate initial constellation data; the other three files are used to visualize the orbit of iridium, oneweb, startlink and other constellations.
 
-The fourth folder is nix-vector-routing/, it makes some modifications to nix vector routing to adapt to SWS algorithm, which can be ignored.
+The fourth folder is nix-vector-routing/, it makes some modifications to nix vector routing to adapt to SWS algorithm.
 
 
 ## use
