@@ -400,10 +400,10 @@ int main (int argc, char *argv[])
   Simulator::Schedule (Seconds (clientStartTime3-0.05), Progress,destinationIp3,source3,dest3,interval3,clientEndTime3);
 
   // 非航点发生故障
-  Simulator::Schedule (Seconds (729.85), setFaultSatellite, nodes.Get(11), true); //728.85
-  Simulator::Schedule (Seconds (732.85), setFaultSatellite, nodes.Get(11), false); //729.85
-  Simulator::Schedule (Seconds (729.85), setFaultSatellite, nodes.Get(21), true); //730.85
-  Simulator::Schedule (Seconds (732.85), setFaultSatellite, nodes.Get(21), false); //732.85
+//  Simulator::Schedule (Seconds (729.85), setFaultSatellite, nodes.Get(11), true); //728.85
+//  Simulator::Schedule (Seconds (732.85), setFaultSatellite, nodes.Get(11), false); //729.85
+//  Simulator::Schedule (Seconds (729.85), setFaultSatellite, nodes.Get(21), true); //730.85
+//  Simulator::Schedule (Seconds (732.85), setFaultSatellite, nodes.Get(21), false); //732.85
 	// 航点发生故障
 //	Simulator::Schedule (Seconds (731.85), setFaultSatellite, nodes.Get(10), true);
 //	Simulator::Schedule (Seconds (733.85), setFaultSatellite, nodes.Get(10), false);

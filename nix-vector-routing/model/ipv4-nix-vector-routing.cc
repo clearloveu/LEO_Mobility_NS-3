@@ -743,12 +743,18 @@ Ipv4NixVectorRouting::RouteInput (Ptr<const Packet> p, const Ipv4Header &header,
 }
 
 void
-Ipv4NixVectorRouting::PrintRoutingTable (Ptr<OutputStreamWrapper> stream) const
+Ipv4NixVectorRouting::PrintRoutingTable (Ptr<OutputStreamWrapper> stream, Time::Unit unit) const
 {
 
   CheckCacheStateAndFlush ();
 
   std::ostream* os = stream->GetStream ();
+
+  *os << "Node: " << m_ipv4->GetObject<Node> ()->GetId ()
+      << ", Time: " << Now().As (unit)
+      << ", Local time: " << GetObject<Node> ()->GetLocalTime ().As (unit)
+      << ", Nix Routing" << std::endl;
+
   *os << "NixCache:" << std::endl;
   if (m_nixCache.size () > 0)
     {
@@ -786,6 +792,7 @@ Ipv4NixVectorRouting::PrintRoutingTable (Ptr<OutputStreamWrapper> stream) const
           *os << std::endl;
         }
     }
+  *os << std::endl;
 }
 
 // virtual functions from Ipv4RoutingProtocol 
