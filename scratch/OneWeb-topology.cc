@@ -7,18 +7,61 @@
 
 using namespace ns3;
 
- //Prints actual position and velocity when a course change event occurs
-static void
-CourseChange (std::string foo, Ptr<const MobilityModel> mobility)
-{
-  Vector pos = mobility->GetPosition ();
-  std::string file_name = "OneWeb-topology.txt";
-  std::ofstream file_writer(file_name, std::ios::app);//打开file_name文件，以ios::app追加的方式输入
-  file_writer << "time:" << Simulator::Now () << std::endl;
-  file_writer << pos.x << " " << pos.y << " " << pos.z << std::endl;
-  file_writer.close();
-
+// 根据ISL的状态进行快照
+void
+newSnapshotWay(NodeContainer nodes, double simulatorLastTime, double T){
+	std::set<double> s;
+	for (NodeContainer::Iterator j = nodes.Begin ();j != nodes.End (); ++j){
+	      Ptr<Node> object = *j;
+	      Ptr<LEOSatelliteMobilityModel> mobility = object->GetObject<LEOSatelliteMobilityModel> ();
+	      double enterNorthPoleTime = mobility->m_helper.getEnterNorthPoleTime();
+	      while (enterNorthPoleTime <= simulatorLastTime) {
+	    	  s.insert(enterNorthPoleTime);
+	    	  enterNorthPoleTime = enterNorthPoleTime + T;
+	      }
+	      double enterSorthPoleTime = mobility->m_helper.getEnterSorthPoleTime();
+	      while (enterSorthPoleTime <= simulatorLastTime) {
+	    	  s.insert(enterSorthPoleTime);
+	    	  enterSorthPoleTime = enterSorthPoleTime + T;
+	      }
+	      double leaveNorthPoleTime = mobility->m_helper.getLeaveNorthPoleTime();
+		  while (leaveNorthPoleTime <= simulatorLastTime) {
+			  s.insert(leaveNorthPoleTime);
+			  leaveNorthPoleTime = leaveNorthPoleTime + T;
+		  }
+		  double leaveSorthPoleTime = mobility->m_helper.getLeaveSorthPoleTime();
+		  while (leaveSorthPoleTime <= simulatorLastTime) {
+			  s.insert(leaveSorthPoleTime);
+			  leaveSorthPoleTime = leaveSorthPoleTime + T;
+		  }
+	}
+	std::cout<<"newSnapshotWay: set.size= "<< s.size() << std::endl;
+	std::set<double>::iterator iter;
+    for(iter = s.begin() ; iter != s.end() ; ++iter){
+         std::cout<<*iter<<" ";
+     }
+    std::cout<<std::endl;
+	for (NodeContainer::Iterator j = nodes.Begin ();j != nodes.End (); ++j){
+	      Ptr<Node> object = *j;
+	      Ptr<LEOSatelliteMobilityModel> mobility = object->GetObject<LEOSatelliteMobilityModel> ();
+	      for(iter = s.begin() ; iter != s.end() ; ++iter){
+	 		  Simulator::Schedule (Seconds (*iter+0.01), &LEOSatelliteMobilityModel::UpdatePosition, mobility);
+	       }
+	}
 }
+
+// //Prints actual position and velocity when a course change event occurs
+//static void
+//CourseChange (std::string foo, Ptr<const MobilityModel> mobility)
+//{
+//  Vector pos = mobility->GetPosition ();
+//  std::string file_name = "OneWeb-topology.txt";
+//  std::ofstream file_writer(file_name, std::ios::app);//打开file_name文件，以ios::app追加的方式输入
+//  file_writer << "time:" << Simulator::Now () << std::endl;
+//  file_writer << pos.x << " " << pos.y << " " << pos.z << std::endl;
+//  file_writer.close();
+//
+//}
 
 int main (int argc, char *argv[])
 {
@@ -43,6 +86,8 @@ int main (int argc, char *argv[])
   for (NodeContainer::Iterator j = nodes.Begin ();j != nodes.End (); ++j){
       Ptr<Node> object = *j;
       Ptr<LEOSatelliteMobilityModel> position = object->GetObject<LEOSatelliteMobilityModel> ();
+      position->setFileName("oneWeb-2021-3-9.txt");// @suppress("Invalid arguments") // 记录卫星运动的文件名
+      position->setEnableRouting(false); // @suppress("Invalid arguments") // 此函数要比SetSatSphericalPos先调用
       // 设置每个卫星的初始位置
       struct LEOSatPolarPos pPos;
       pPos.altitude = ALTITUDE;
@@ -50,15 +95,17 @@ int main (int argc, char *argv[])
       pPos.alpha =  iridiumConstellation[index/40][index%40][2];
       pPos.inclination =  INCLINATION;
       pPos.plane =  iridiumConstellation[index/40][index%40][3];
+      pPos.self = nodes.Get(index);
+      pPos.index = index;
       position->SetSatSphericalPos(pPos); // @suppress("Invalid arguments")
       position->setRoutingAlgorithmAndSnapShotWay(2, 1); // @suppress("Invalid arguments")
       NS_ASSERT (position != 0);
       index++;
     }
-  Config::Connect ("/NodeList/*/$ns3::MobilityModel/CourseChange",
-                   MakeCallback (&CourseChange));
+//  Config::Connect ("/NodeList/*/$ns3::MobilityModel/CourseChange",
+//                   MakeCallback (&CourseChange));
 
-  Simulator::Stop (Seconds (7000.0));
+  Simulator::Stop (Seconds (2000.0));
 
   Simulator::Run ();
   Simulator::Destroy ();

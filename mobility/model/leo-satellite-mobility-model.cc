@@ -100,10 +100,28 @@ LEOSatelliteMobilityModel::setRoutingAlgorithmAndSnapShotWay(int algorithmNum, i
 	selectSnapShotWay = snapShotWay;
 }
 
+void
+LEOSatelliteMobilityModel::setEnableRouting(bool enableRoutingFlag)
+{
+	enableRouting = enableRoutingFlag;
+}
+
+void
+LEOSatelliteMobilityModel::setFileName(std::string file_name)
+{
+	fileName = file_name;
+}
+
 int
 LEOSatelliteMobilityModel::getRoutingAlgorithmNumber() const
 {
 	return routingAlgorithmNumber;
+}
+
+bool
+LEOSatelliteMobilityModel::getEnableRouting() const
+{
+	return enableRouting;
 }
 
 void
@@ -116,14 +134,14 @@ LEOSatelliteMobilityModel::NotifyCourseChange(void)
 //	std::cout << "beforeDistance=" << getBeforeDistance() << ", afterDistance=" << getAfterDistance() << ", leftDistance=" << getLeftDistance() << ", rightDistance=" << getRightDistance() <<std::endl;
 
 
-    std::string file_name = "/home/zg/ns3/eclipse/eclipse-workstation/leo_mobility/leosatellite-master/iridium2-2020-12-21-3.txt";
-//	std::string file_name = "/home/zg/ns3/eclipse/eclipse-workstation/leo_mobility/leosatellite-master/oneWeb-2020-12-21.txt";
-//	std::string file_name = "/home/zg/ns3/eclipse/eclipse-workstation/leo_mobility/leosatellite-master/startLink-2020-12-21.txt";
-    std::ofstream file_writer(file_name, std::ios::app);//打开file_name文件，以ios::app追加的方式输入
+    std::ofstream file_writer(fileName, std::ios::app);//打开file_name文件，以ios::app追加的方式输入
 //    std::ofstream file_writer(file_name);//打开file_name文件，默认方式是覆盖原文件的内容
     file_writer << "time:" << Simulator::Now () << std::endl;
     file_writer << pos.x << " " << pos.y << " " << pos.z << std::endl;
-//    file_writer <<std::boolalpha<< getIsLeftSatelliteConnection() << " " <<std::boolalpha<< getIsRightSatelliteConnection() << " " << getTheta() << std::endl;// @suppress("Invalid arguments")
+    // 如果启用了路由，则代表也需要记录此时该卫星的左右连接状态
+    if(enableRouting == true) {
+    	 file_writer <<std::boolalpha<< getIsLeftSatelliteConnection() << " " <<std::boolalpha<< getIsRightSatelliteConnection() << " " << getTheta() << std::endl;// @suppress("Invalid arguments")
+    }
     file_writer.close(); // @suppress("Invalid arguments")
 }
 

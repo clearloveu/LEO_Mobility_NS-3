@@ -131,6 +131,7 @@ int main (int argc, char *argv[])
   for (NodeContainer::Iterator j = nodes.Begin ();j != nodes.End (); ++j){
       Ptr<Node> object = *j;
       Ptr<LEOSatelliteMobilityModel> position = object->GetObject<LEOSatelliteMobilityModel> ();
+      position->setFileName("iridium2-2021-3-9-2.txt");// @suppress("Invalid arguments") // 记录卫星运动的文件名
       // 设置每个卫星的初始位置
       struct LEOSatPolarPos pPos;
       pPos.altitude = ALTITUDE;
@@ -329,13 +330,13 @@ int main (int argc, char *argv[])
     clientApps3.Start (Seconds (clientStartTime3));
     clientApps3.Stop (Seconds (clientEndTime3));
     // 非航点发生故障
-    Simulator::Schedule (Seconds (729.85), setFaultSatellite, nodes.Get(11), true); //728.85
-    Simulator::Schedule (Seconds (732.85), setFaultSatellite, nodes.Get(11), false); //729.85
-    Simulator::Schedule (Seconds (729.85), setFaultSatellite, nodes.Get(21), true); //730.85
-    Simulator::Schedule (Seconds (732.85), setFaultSatellite, nodes.Get(21), false); //732.85
-    for(double i = 728.89; i < 733.0;i = i + 0.1) {
-    	Simulator::Schedule (Seconds (i), Progress2);
-    }
+//    Simulator::Schedule (Seconds (729.85), setFaultSatellite, nodes.Get(11), true); //728.85
+//    Simulator::Schedule (Seconds (732.85), setFaultSatellite, nodes.Get(11), false); //729.85
+//    Simulator::Schedule (Seconds (729.85), setFaultSatellite, nodes.Get(21), true); //730.85
+//    Simulator::Schedule (Seconds (732.85), setFaultSatellite, nodes.Get(21), false); //732.85
+//    for(double i = 728.89; i < 733.0;i = i + 0.1) {
+//    	Simulator::Schedule (Seconds (i), Progress2);
+//    }
   	// 航点发生故障
 //  	Simulator::Schedule (Seconds (731.85), setFaultSatellite, nodes.Get(10), true);
 //  	Simulator::Schedule (Seconds (733.85), setFaultSatellite, nodes.Get(10), false);

@@ -906,11 +906,15 @@ LEOSatelliteHelper::SetPos(const Vector &position)
 void
 LEOSatelliteHelper::SetPos(const LEOSatPolarPos& pos)
 {
-   m_pos = convertPolarToSpherical(pos);
-   LEOSatSphericalPos temp = m_pos;
-   // 增加计算进入、离开南北极圈的时间
-   conculateTime(temp);
-   m_lastUpdate = Simulator::Now();
+    m_pos = convertPolarToSpherical(pos);
+	Ptr<LEOSatelliteMobilityModel> mobility = m_pos.self->GetObject<LEOSatelliteMobilityModel> ();
+	bool enableRouting = mobility->getEnableRouting();
+	if(enableRouting == true){
+		// 如果路由启动的情况下，则增加计算进入、离开南北极圈的时间，后面SWS路由算法会用到
+	    LEOSatSphericalPos temp = m_pos;
+		conculateTime(temp);
+	}
+    m_lastUpdate = Simulator::Now();
 }
 
 void
@@ -994,7 +998,11 @@ LEOSatelliteHelper::Update (void) const
   }
   m_pos = computeCurPos(deltaS);
   if(isFault != true) {
-	  handle();// 设置接口权值，设置链路通断，调用计算路由表(如果是节点之间没有建立链路的例子，如OneWeb、StartLink等星座，则这行要注释，否则会报错)
+		Ptr<LEOSatelliteMobilityModel> mobility = m_pos.self->GetObject<LEOSatelliteMobilityModel> ();
+		bool enableRouting = mobility->getEnableRouting();
+		if(enableRouting == true){
+			  handle();// 设置接口权值，设置链路通断，调用计算路由表(如果是节点之间没有建立链路的例子，如OneWeb、StartLink等星座，则这行不应该被调用，否则会报错)
+		}
   }
 }
 
@@ -1017,7 +1025,11 @@ LEOSatelliteHelper::UpdateOnlyComputeCurPos (void) const
   }
   m_pos = computeCurPos(deltaS);
   if(isFault != true) {
-	  handle();// 设置接口权值，设置链路通断，调用计算路由表(如果是节点之间没有建立链路的例子，如OneWeb、StartLink等星座，则这行要注释，否则会报错)
+		Ptr<LEOSatelliteMobilityModel> mobility = m_pos.self->GetObject<LEOSatelliteMobilityModel> ();
+		bool enableRouting = mobility->getEnableRouting();
+		if(enableRouting == true){
+			  handle();// 设置接口权值，设置链路通断，调用计算路由表(如果是节点之间没有建立链路的例子，如OneWeb、StartLink等星座，则这行不应该被调用，否则会报错)
+		}
   }
 }
 

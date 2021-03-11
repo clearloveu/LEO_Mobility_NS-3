@@ -148,8 +148,7 @@ def read(readFile):
 
 if __name__ == '__main__':
 
-    read("iridium2-2020-12-21-2.txt")
-    # read("iridium2-2020-7-5.txt")
+    read("iridium2-2021-3-9-2.txt")
 
     # 地球半径
     R = 6378

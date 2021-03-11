@@ -28,7 +28,10 @@ public:
    bool getIsRightSatelliteConnection (void) const;//右卫星是否相连
    double getTheta(void) const;
    void setRoutingAlgorithmAndSnapShotWay(int algorithmNum, int snapShotWay);
+   void setEnableRouting(bool enableRoutingFlag);// 此函数要比SetSatSphericalPos先调用，因为SetSatSphericalPos函数会调用enableRouting变量
+   void setFileName(std::string file_name);
    int getRoutingAlgorithmNumber() const;
+   bool getEnableRouting() const;
 
 
    // 为了保存和左右2个节点是否连接的bool值
@@ -47,6 +50,11 @@ private:
    EventId m_event; //!< stored event ID
    int routingAlgorithmNumber = 2; // 1:全局路由（Ipv4GlobalRoutingHelper::PopulateRoutingTables ()）;  2:分段路由（nix）;  3:OLSR
    int selectSnapShotWay = 1; // 1：按固定间隔进行快照  2：按拓扑状态的变化进行快照，当该变量的值为2时，这个功能由测例的newSnapshotWay函数完成
+
+   // 设计这个变量的原因是因为我写的leo-mobility包含了移动模型和路由模型，而如果测例只有卫星系统的拓扑运动（如OneWeb和StartLink），
+   // 路由模块不需要启用（如果启用了，在路由计算处会报错，因为测例没有路由），这个变量就是用来控制路由模块是否启用
+   bool enableRouting = true; // true: 启用路由模块；false：不启用路由模块
+   std::string fileName = "fileName.txt"; // 记录卫星运动的文件名
 
    Vector getCoordinateBySatSpher(LEOSatSphericalPos pos) const;// 根据球形坐标获得3维坐标
 

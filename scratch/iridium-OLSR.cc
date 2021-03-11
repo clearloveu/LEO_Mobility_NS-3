@@ -123,6 +123,7 @@ int main (int argc, char *argv[])
   for (NodeContainer::Iterator j = nodes.Begin ();j != nodes.End (); ++j){
       Ptr<Node> object = *j;
       Ptr<LEOSatelliteMobilityModel> position = object->GetObject<LEOSatelliteMobilityModel> ();
+      position->setFileName("iridium2-2021-3-9-2.txt");// @suppress("Invalid arguments") // 记录卫星运动的文件名
       // 设置每个卫星的初始位置
       struct LEOSatPolarPos pPos;
       pPos.altitude = ALTITUDE;
