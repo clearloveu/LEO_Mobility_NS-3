@@ -22,29 +22,16 @@ def read(readFile):
         packetType = each_line[packetTyPeIndex+5:packetTyPeAfterIndex]
         #print(each_line)
         if(each_line[0]=="+"):
-            print("time: " + time + " 节点: " + nodeId + " 接口id: " + interfaceId + " 进入发送缓存" + " ip: "+ ipTrance + " 数据包类型: " + packetType + " 分组长度: " + length)
+            print("time: " + time + " 节点: " + nodeId + " 接口id: " + interfaceId + " 进入发送队列" + " ip: "+ ipTrance + " 数据包类型: " + packetType + " 分组长度: " + length)
         elif(each_line[0]=="-"):
-            print("time: " + time + " 节点: " + nodeId + " 接口id: " + interfaceId + " 离开发送缓存" + " ip: "+ ipTrance + " 数据包类型: " + packetType + " 分组长度: " + length )
+            print("time: " + time + " 节点: " + nodeId + " 接口id: " + interfaceId + " 离开发送队列" + " ip: "+ ipTrance + " 数据包类型: " + packetType + " 分组长度: " + length )
         elif(each_line[0]=="r"):
             print("time: " + time + " 节点: " + nodeId + " 接口id: " + interfaceId + " mac层接收到 " + " ip: "+ ipTrance + " 数据包类型: " + packetType + " 分组长度: " + length)
     f.close()
 
 
 if __name__ == '__main__':
-    argv = sys.argv[1]
-    fileName = "iridium-topology2-udpV3.tr"
-    if (argv == "1"):
-        fileName = "iridium-topology2-udpV3.tr"
-    elif (argv == "2"):
-        fileName = "iridium-nix-route.tr"
-    elif (argv == "3"):
-        fileName = "iridium-nix-segment-routing.tr"
-    elif (argv == "4"):
-        fileName = "iridium-nix-segment-routing2.tr"
-    elif (argv == "5"):
-        fileName = "iridium-SWS.tr"
-    print("read fileName" + fileName)
-    read(fileName)
+    read("iridium-SWS-1-2.tr")
 
 
 
