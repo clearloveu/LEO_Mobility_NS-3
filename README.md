@@ -1,4 +1,7 @@
 # LEO_Mobility_NS-3
+
+This project is to support my academic papers.
+
 ## function
 Because ns-3 itself lacks the corresponding LEO satellite mobile module, it is necessary to develop a simple and easy-to-use LEO satellite mobile module in ns-3.
 
