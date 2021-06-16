@@ -22,7 +22,7 @@ The fourth folder is nix-vector-routing/, it makes some modifications to nix vec
 
 
 ## use
-To use it, simply replace the file directory with src/mobility/ and src/mobility/nix-vector-routing/. Then, recompile：
+To use it, simply replace the file directory with src/mobility/ and src/nix-vector-routing/. Then, recompile：
 ```
 ./waf configure
 ./waf build
